@@ -83,7 +83,7 @@ typeScriptSettings = do
   jsettings <- javascriptSettings
   return $ jsettings { varChar = '#'
   , preConversion = Just PreConvert {
-      preConvert = ReadProcess "sh" ["-c", "TMP_IN=$(mktemp XXXXXXXXXX.ts); TMP_OUT=$(mktemp XXXXXXXXXX.js); cat /dev/stdin > ${TMP_IN} && tsc --out ${TMP_OUT} ${TMP_IN} && cat ${TMP_OUT}; rm ${TMP_IN} && rm ${TMP_OUT}"]
+      preConvert = ReadProcess "sh" ["-c", "TMP_IN=$(mktemp XXXXXXXXXX.ts); TMP_OUT=$(mktemp XXXXXXXXXX.js); cat /dev/stdin > ${TMP_IN} && tsc --outfile ${TMP_OUT} ${TMP_IN} && cat ${TMP_OUT}; rm ${TMP_IN} && rm ${TMP_OUT}"]
     , preEscapeIgnoreBalanced = "'\""
     , preEscapeIgnoreLine = "//"
     , wrapInsertion = Just WrapInsertion { 
@@ -102,7 +102,7 @@ typeScriptSettings = do
 typeScriptJSXSettings :: Q ShakespeareSettings
 typeScriptJSXSettings = do
     tsSettings <- typeScriptSettings
-    let rp = ReadProcess "sh" ["-c", "TMP_IN=$(mktemp XXXXXXXXXX.tsx); TMP_OUT=$(mktemp XXXXXXXXXX.js); cat /dev/stdin > ${TMP_IN} && tsc --module amd --jsx react --out ${TMP_OUT} ${TMP_IN} && cat ${TMP_OUT}; rm ${TMP_IN} && rm ${TMP_OUT}"]
+    let rp = ReadProcess "sh" ["-c", "TMP_IN=$(mktemp XXXXXXXXXX.tsx); TMP_OUT=$(mktemp XXXXXXXXXX.js); cat /dev/stdin > ${TMP_IN} && tsc --module amd --jsx react --outfile ${TMP_OUT} ${TMP_IN} && cat ${TMP_OUT}; rm ${TMP_IN} && rm ${TMP_OUT}"]
     return $ tsSettings {
         preConversion = fmap (\pc -> pc { preConvert = rp }) (preConversion tsSettings)
     }
